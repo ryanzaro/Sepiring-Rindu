@@ -1,14 +1,59 @@
 /* ============ DATA ============ */
 const MENU_ITEMS = [
-  { id: "dendeng-balado", name: "Dendeng Balado", price: 28000, img: "https://loremflickr.com/400/300/dendengbalado,indonesianfood" },
-  { id: "ayam-pop", name: "Ayam Pop", price: 25000, img: "https://loremflickr.com/400/300/ayampop,friedchicken,indonesianfood" },
-  { id: "tumis-kangkung", name: "Tumis Kangkung", price: 15000, img: "https://loremflickr.com/400/300/kangkung,stirfry,vegetable" },
-  { id: "rendang", name: "Rendang", price: 32000, img: "https://loremflickr.com/400/300/rendang,beef,indonesianfood" },
-  { id: "ayam-gulai", name: "Ayam Gulai", price: 26000, img: "https://loremflickr.com/400/300/ayamgulai,curry,chicken" },
-  { id: "gulai-tambusu", name: "Gulai Tambusu", price: 24000, img: "https://loremflickr.com/400/300/gulai,curry,indonesianfood" },
-  { id: "gulai-kikil", name: "Gulai Kikil", price: 23000, img: "https://loremflickr.com/400/300/gulaikikil,beefcurry" },
-  { id: "ayam-rendang", name: "Ayam Rendang", price: 27000, img: "https://loremflickr.com/400/300/chickenrendang,indonesianfood" },
-  { id: "sayur-sayuran", name: "Sayur-Sayuran", price: 14000, img: "https://loremflickr.com/400/300/vegetables,sayur,indonesianfood" },
+  {
+    id: "dendeng-balado",
+    name: "Dendeng Balado",
+    price: 28000,
+    img: "https://loremflickr.com/400/300/dendengbalado,indonesianfood",
+  },
+  {
+    id: "ayam-pop",
+    name: "Ayam Pop",
+    price: 25000,
+    img: "https://loremflickr.com/400/300/ayampop,friedchicken,indonesianfood",
+  },
+  {
+    id: "tumis-kangkung",
+    name: "Tumis Kangkung",
+    price: 15000,
+    img: "https://loremflickr.com/400/300/kangkung,stirfry,vegetable",
+  },
+  {
+    id: "rendang",
+    name: "Rendang",
+    price: 32000,
+    img: "https://loremflickr.com/400/300/rendang,beef,indonesianfood",
+  },
+  {
+    id: "ayam-gulai",
+    name: "Ayam Gulai",
+    price: 26000,
+    img: "https://loremflickr.com/400/300/ayamgulai,curry,chicken",
+  },
+  {
+    id: "gulai-tambusu",
+    name: "Gulai Tambusu",
+    price: 24000,
+    img: "https://loremflickr.com/400/300/gulai,curry,indonesianfood",
+  },
+  {
+    id: "gulai-kikil",
+    name: "Gulai Kikil",
+    price: 23000,
+    img: "https://loremflickr.com/400/300/gulaikikil,beefcurry",
+  },
+  {
+    id: "ayam-rendang",
+    name: "Ayam Rendang",
+    price: 27000,
+    img: "https://loremflickr.com/400/300/chickenrendang,indonesianfood",
+  },
+  {
+    id: "sayur-sayuran",
+    name: "Sayur-Sayuran",
+    price: 14000,
+    img: "https://loremflickr.com/400/300/vegetables,sayur,indonesianfood",
+  },
 ];
 
 const WHATSAPP_NUMBER = "6281234567890"; // ganti dengan nomor WA pemilik
@@ -18,34 +63,51 @@ const STORAGE_USER = "sr_user";
 const STORAGE_CART = "sr_cart";
 
 function getUser() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_USER)); } catch { return null; }
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_USER));
+  } catch {
+    return null;
+  }
 }
-function setUser(user) { localStorage.setItem(STORAGE_USER, JSON.stringify(user)); }
-function clearUser() { localStorage.removeItem(STORAGE_USER); }
+function setUser(user) {
+  localStorage.setItem(STORAGE_USER, JSON.stringify(user));
+}
+function clearUser() {
+  localStorage.removeItem(STORAGE_USER);
+}
 
 function getCart() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_CART)) || {}; } catch { return {}; }
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_CART)) || {};
+  } catch {
+    return {};
+  }
 }
-function setCart(cart) { localStorage.setItem(STORAGE_CART, JSON.stringify(cart)); }
+function setCart(cart) {
+  localStorage.setItem(STORAGE_CART, JSON.stringify(cart));
+}
 
 /* ============ NAVIGATION ============ */
-const pages = ["home", "menu", "about", "login", "signup", "pesanan"];
+const pages = ["home", "login", "signup", "pesanan"];
 
-function showPage(pageId) {
+function showPage(pageId, clickedEl) {
   if (pageId === "pesanan" && !getUser()) {
     pageId = "login";
   }
   if ((pageId === "login" || pageId === "signup") && getUser()) {
     pageId = "pesanan";
   }
-  pages.forEach(p => {
+  pages.forEach((p) => {
     const el = document.getElementById(`page-${p}`);
-    if (el) el.style.display = (p === pageId) ? "" : "none";
+    if (el) el.style.display = p === pageId ? "" : "none";
   });
-  document.querySelectorAll(".nav-link").forEach(link => {
-    link.classList.toggle("active", link.dataset.page === pageId);
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.classList.toggle(
+      "active",
+      clickedEl ? link === clickedEl : link.dataset.page === pageId,
+    );
   });
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "auto" });
   closeMobileNav();
 }
 
@@ -53,7 +115,15 @@ document.addEventListener("click", (e) => {
   const target = e.target.closest("[data-page]");
   if (target) {
     e.preventDefault();
-    showPage(target.dataset.page);
+    const isNavLink = target.classList.contains("nav-link");
+    showPage(target.dataset.page, isNavLink ? target : null);
+    const scrollTarget = target.dataset.scroll;
+    if (scrollTarget && scrollTarget !== "top") {
+      setTimeout(() => {
+        const el = document.getElementById(scrollTarget);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
+    }
   }
 });
 
@@ -76,7 +146,8 @@ function refreshAuthUI() {
     navAuth.style.display = "none";
     navUser.style.display = "flex";
     navPesanan.style.display = "flex";
-    document.getElementById("userNameLabel").textContent = user.name.split(" ")[0];
+    document.getElementById("userNameLabel").textContent =
+      user.name.split(" ")[0];
   } else {
     navAuth.style.display = "flex";
     navUser.style.display = "none";
@@ -121,10 +192,19 @@ document.getElementById("signupForm").addEventListener("submit", (e) => {
 /* ============ MENU RENDER ============ */
 function renderMenu() {
   const grid = document.getElementById("menuGrid");
-  grid.innerHTML = MENU_ITEMS.map(item => `
+  grid.innerHTML = MENU_ITEMS.map(
+    (item) => `
     <div class="menu-card">
       <div class="menu-card-image">
         <img src="${item.img}" alt="${item.name}" loading="lazy">
+        <span class="halal-mini" title="Bersertifikat Halal">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="30" fill="#264653"/>
+            <circle cx="32" cy="32" r="30" fill="none" stroke="#C48A5A" stroke-width="2"/>
+            <path d="M18 24 C18 20 21 17 25 17 C28 17 30 19 31 21 C32 19 34 17 37 17 C41 17 44 20 44 24 C44 30 36 36 31 41 C26 36 18 30 18 24 Z" fill="none" stroke="#FAF6F0" stroke-width="2.2" stroke-linejoin="round"/>
+            <text x="32" y="50" text-anchor="middle" font-family="Georgia, serif" font-size="9" font-weight="700" fill="#FAF6F0">HALAL</text>
+          </svg>
+        </span>
       </div>
       <div class="menu-card-body">
         <div>
@@ -134,9 +214,10 @@ function renderMenu() {
         <button class="order-btn" data-id="${item.id}" aria-label="Pesan ${item.name}">+</button>
       </div>
     </div>
-  `).join("");
+  `,
+  ).join("");
 
-  grid.querySelectorAll(".order-btn").forEach(btn => {
+  grid.querySelectorAll(".order-btn").forEach((btn) => {
     btn.addEventListener("click", () => handleOrderClick(btn.dataset.id, btn));
   });
 }
@@ -156,9 +237,12 @@ function handleOrderClick(itemId, btnEl) {
   if (btnEl) {
     btnEl.classList.add("added");
     btnEl.textContent = "✓";
-    setTimeout(() => { btnEl.classList.remove("added"); btnEl.textContent = "+"; }, 700);
+    setTimeout(() => {
+      btnEl.classList.remove("added");
+      btnEl.textContent = "+";
+    }, 700);
   }
-  const item = MENU_ITEMS.find(i => i.id === itemId);
+  const item = MENU_ITEMS.find((i) => i.id === itemId);
   showToast(`${item.name} ditambahkan ke Pesanan Saya.`);
 }
 
@@ -184,11 +268,13 @@ function renderOrders() {
   document.getElementById("orderWhatsappBtn").disabled = false;
 
   let totalPrice = 0;
-  list.innerHTML = entries.map(([id, qty]) => {
-    const item = MENU_ITEMS.find(i => i.id === id);
-    if (!item) return "";
-    totalPrice += item.price * qty;
-    return `
+  list.innerHTML =
+    entries
+      .map(([id, qty]) => {
+        const item = MENU_ITEMS.find((i) => i.id === id);
+        if (!item) return "";
+        totalPrice += item.price * qty;
+        return `
       <div class="order-item" data-id="${id}">
         <img src="${item.img}" alt="${item.name}">
         <div class="order-item-info">
@@ -203,11 +289,25 @@ function renderOrders() {
         <button class="remove-btn" data-id="${id}">Hapus</button>
       </div>
     `;
-  }).join("") + `<div class="order-summary-line"><span>Total</span><span>Rp ${totalPrice.toLocaleString("id-ID")}</span></div>`;
+      })
+      .join("") +
+    `<div class="order-summary-line"><span>Total</span><span>Rp ${totalPrice.toLocaleString("id-ID")}</span></div>`;
 
-  list.querySelectorAll(".qty-plus").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, 1)));
-  list.querySelectorAll(".qty-minus").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, -1)));
-  list.querySelectorAll(".remove-btn").forEach(b => b.addEventListener("click", () => removeItem(b.dataset.id)));
+  list
+    .querySelectorAll(".qty-plus")
+    .forEach((b) =>
+      b.addEventListener("click", () => changeQty(b.dataset.id, 1)),
+    );
+  list
+    .querySelectorAll(".qty-minus")
+    .forEach((b) =>
+      b.addEventListener("click", () => changeQty(b.dataset.id, -1)),
+    );
+  list
+    .querySelectorAll(".remove-btn")
+    .forEach((b) =>
+      b.addEventListener("click", () => removeItem(b.dataset.id)),
+    );
 }
 
 function changeQty(id, delta) {
@@ -237,13 +337,14 @@ document.getElementById("orderWhatsappBtn").addEventListener("click", () => {
   const phone = document.getElementById("deliveryPhone").value.trim();
   const time = document.getElementById("deliveryTime").value.trim();
 
-  const itemLines = entries.map(([id, qty]) => {
-    const item = MENU_ITEMS.find(i => i.id === id);
-    return `- ${item.name} x${qty}`;
-  }).join("\n");
+  const itemLines = entries
+    .map(([id, qty]) => {
+      const item = MENU_ITEMS.find((i) => i.id === id);
+      return `- ${item.name} x${qty}`;
+    })
+    .join("\n");
 
-  const message =
-`Assalamu'alaikum, saya ingin pesan makanan sebagai berikut :
+  const message = `Assalamu'alaikum, saya ingin pesan makanan sebagai berikut :
 ${itemLines}
 
 Alamat Pengiriman : ${address || "-"}
@@ -268,10 +369,10 @@ function showToast(message) {
 function init() {
   renderMenu();
   refreshAuthUI();
-  showPage("home");
+  showPage("home", document.querySelector('.nav-link[data-scroll="top"]'));
 
   // re-render pesanan whenever that page becomes visible
-  document.querySelectorAll("[data-page='pesanan']").forEach(el => {
+  document.querySelectorAll("[data-page='pesanan']").forEach((el) => {
     el.addEventListener("click", renderOrders);
   });
 }
