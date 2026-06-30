@@ -342,7 +342,7 @@ Alamat Pengiriman : ${address || "-"}
 Nomor HP/WA yang bisa di hubungi : ${phone || "-"}
 Waktu Pengantaran : ${time || "-"}`;
 
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  const url = `https://wa.me/"6285102332894"}?text=${encodeURIComponent(message)}`;
   window.open(url, "_blank");
 });
 
