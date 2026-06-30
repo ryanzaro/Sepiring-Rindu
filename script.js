@@ -56,7 +56,7 @@ const MENU_ITEMS = [
   },
 ];
 
-const WHATSAPP_NUMBER = "6281234567890"; // ganti dengan nomor WA pemilik
+const WHATSAPP_NUMBER = "6285102332894"; // ganti dengan nomor WA pemilik
 
 /* ============ STATE (localStorage) ============ */
 const STORAGE_USER = "sr_user";
@@ -342,7 +342,7 @@ Alamat Pengiriman : ${address || "-"}
 Nomor HP/WA yang bisa di hubungi : ${phone || "-"}
 Waktu Pengantaran : ${time || "-"}`;
 
-  const url = `https://wa.me/"6285102332894"}?text=${encodeURIComponent(message)}`;
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   window.open(url, "_blank");
 });
 
