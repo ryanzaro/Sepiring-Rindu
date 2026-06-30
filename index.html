@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sepiring Rindu - Masakan Rumah</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="brand">
+        <span class="brand-mark"
+          ><img src="/img/sepiring-rindu-logo.jpeg" alt="Sepiring Rindu Logo"
+        /></span>
+        <div class="brand-text">
+          <span class="brand-name">Sepiring Rindu</span>
+          <span class="brand-tagline">Masakan Rumah</span>
+        </div>
+      </div>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#" class="nav-link active" data-page="home">Home</a>
+        <a href="#" class="nav-link" data-page="menu">Menu</a>
+        <a href="#" class="nav-link" data-page="about">About</a>
+        <a
+          href="#"
+          class="nav-link"
+          id="navPesanan"
+          data-page="pesanan"
+          style="display: none"
+          >Pesanan Saya<span class="badge" id="orderBadge">0</span></a
+        >
+      </nav>
+
+      <div class="nav-auth" id="navAuth">
+        <a href="#" class="btn-text" data-page="login">Login</a>
+        <a href="#" class="btn-outline" data-page="signup">Sign Up</a>
+      </div>
+
+      <div class="nav-auth" id="navUser" style="display: none">
+        <span class="user-greet"
+          >Halo, <span id="userNameLabel">Tamu</span></span
+        >
+        <a href="#" class="btn-outline" id="logoutBtn">Keluar</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <main id="app">
+      <!-- HOME -->
+      <section class="page" id="page-home">
+        <div class="hero">
+          <div class="hero-text">
+            <p class="eyebrow">Hangat &middot; Rumahan &middot; Penuh Rindu</p>
+            <h1>Rasa rumah,<br />diantar untuk yang merindukannya.</h1>
+            <p class="hero-desc">
+              Setiap piring kami masak dengan resep keluarga turun-temurun
+              &mdash; bumbu yang digiling sendiri, santan yang ditumis sabar,
+              untuk siapa pun yang rindu masakan Ibu.
+            </p>
+            <a href="#" class="btn-primary" data-page="menu">Lihat Menu Kami</a>
+          </div>
+          <div class="hero-image">
+            <img
+              src="/img/sepiring-rindu.jpeg"
+              alt="Masakan rumahan Nusantara di atas meja kayu"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- MENU -->
+      <section class="page" id="page-menu" style="display: none">
+        <div class="section-head">
+          <p class="eyebrow">Pilihan Hari Ini</p>
+          <h2>Menu Masakan Rumah</h2>
+          <p class="section-desc">
+            Sembilan menu favorit, dimasak segar setiap hari. Tekan tombol +
+            untuk memesan.
+          </p>
+        </div>
+        <div class="menu-grid" id="menuGrid"></div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="page" id="page-about" style="display: none">
+        <div class="about-wrap">
+          <div class="about-image">
+            <img
+              src="https://loremflickr.com/600/700/kitchen,cooking,family"
+              alt="Dapur rumah Sepiring Rindu"
+            />
+          </div>
+          <div class="about-text">
+            <p class="eyebrow">Cerita Kami</p>
+            <h2>Dari Dapur Kecil, untuk Hati yang Rindu Rumah</h2>
+            <p>
+              Sepiring Rindu bermula dari dapur kecil seorang ibu yang gemar
+              memasak untuk anak-anaknya yang merantau. Setiap akhir pekan,
+              masakan itu selalu habis dikirim ke kos-kosan, kontrakan, dan
+              kantor &mdash; titipan rasa rumah untuk yang jauh dari kampung
+              halaman.
+            </p>
+            <p>
+              Dari situ, Sepiring Rindu lahir: usaha kecil yang membawa masakan
+              rumahan otentik &mdash; rendang yang dimasak berjam-jam, gulai
+              yang kaya rempah, sayur yang segar dipetik &mdash; ke meja makan
+              siapa pun yang merindukan suapan yang terasa seperti pulang.
+            </p>
+            <p>
+              Kami percaya, makan bukan sekadar mengisi perut, tapi juga
+              mengobati rindu. Itulah mengapa setiap pesanan kami siapkan dengan
+              hati, seperti memasak untuk keluarga sendiri.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOGIN -->
+      <section class="page" id="page-login" style="display: none">
+        <div class="auth-card">
+          <p class="eyebrow">Selamat Datang Kembali</p>
+          <h2>Masuk ke Akun Anda</h2>
+          <form id="loginForm">
+            <label
+              >Nama
+              <input
+                type="text"
+                id="loginName"
+                placeholder="Nama Anda"
+                required
+              />
+            </label>
+            <label
+              >Nomor HP / WA
+              <input
+                type="tel"
+                id="loginPhone"
+                placeholder="08xxxxxxxxxx"
+                required
+              />
+            </label>
+            <button type="submit" class="btn-primary full">Masuk</button>
+          </form>
+          <p class="auth-switch">
+            Belum punya akun? <a href="#" data-page="signup">Daftar di sini</a>
+          </p>
+        </div>
+      </section>
+
+      <!-- SIGNUP -->
+      <section class="page" id="page-signup" style="display: none">
+        <div class="auth-card">
+          <p class="eyebrow">Bergabung Bersama Kami</p>
+          <h2>Buat Akun Baru</h2>
+          <form id="signupForm">
+            <label
+              >Nama Lengkap
+              <input
+                type="text"
+                id="signupName"
+                placeholder="Nama lengkap Anda"
+                required
+              />
+            </label>
+            <label
+              >Nomor HP / WA
+              <input
+                type="tel"
+                id="signupPhone"
+                placeholder="08xxxxxxxxxx"
+                required
+              />
+            </label>
+            <label
+              >Alamat
+              <input
+                type="text"
+                id="signupAddress"
+                placeholder="Alamat pengiriman"
+              />
+            </label>
+            <button type="submit" class="btn-primary full">Daftar</button>
+          </form>
+          <p class="auth-switch">
+            Sudah punya akun? <a href="#" data-page="login">Masuk di sini</a>
+          </p>
+        </div>
+      </section>
+
+      <!-- PESANAN SAYA -->
+      <section class="page" id="page-pesanan" style="display: none">
+        <div class="section-head">
+          <p class="eyebrow">Keranjang Rindu</p>
+          <h2>Pesanan Saya</h2>
+          <p class="section-desc">
+            Periksa pesanan Anda, lengkapi data pengiriman, lalu kirim ke
+            WhatsApp kami.
+          </p>
+        </div>
+
+        <div class="order-wrap">
+          <div class="order-list" id="orderList">
+            <p class="empty-state">
+              Belum ada pesanan. Yuk pilih menu favorit Anda.
+            </p>
+          </div>
+
+          <div class="order-form-card">
+            <h3>Data Pengiriman</h3>
+            <label
+              >Alamat Pengiriman
+              <textarea
+                id="deliveryAddress"
+                rows="2"
+                placeholder="Tulis alamat lengkap..."
+              ></textarea>
+            </label>
+            <label
+              >Nomor HP/WA yang bisa dihubungi
+              <input type="tel" id="deliveryPhone" placeholder="08xxxxxxxxxx" />
+            </label>
+            <label
+              >Waktu Pengantaran
+              <input
+                type="text"
+                id="deliveryTime"
+                placeholder="Contoh: Hari ini, 18.00 WIB"
+              />
+            </label>
+            <button class="btn-whatsapp" id="orderWhatsappBtn">
+              Pesan via WhatsApp
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        &copy; 2026 Sepiring Rindu - Masakan Rumah. Dimasak dengan hati, diantar
+        dengan rindu.
+      </p>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

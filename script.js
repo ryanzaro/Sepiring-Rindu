@@ -1,0 +1,279 @@
+/* ============ DATA ============ */
+const MENU_ITEMS = [
+  { id: "dendeng-balado", name: "Dendeng Balado", price: 28000, img: "https://loremflickr.com/400/300/dendengbalado,indonesianfood" },
+  { id: "ayam-pop", name: "Ayam Pop", price: 25000, img: "https://loremflickr.com/400/300/ayampop,friedchicken,indonesianfood" },
+  { id: "tumis-kangkung", name: "Tumis Kangkung", price: 15000, img: "https://loremflickr.com/400/300/kangkung,stirfry,vegetable" },
+  { id: "rendang", name: "Rendang", price: 32000, img: "https://loremflickr.com/400/300/rendang,beef,indonesianfood" },
+  { id: "ayam-gulai", name: "Ayam Gulai", price: 26000, img: "https://loremflickr.com/400/300/ayamgulai,curry,chicken" },
+  { id: "gulai-tambusu", name: "Gulai Tambusu", price: 24000, img: "https://loremflickr.com/400/300/gulai,curry,indonesianfood" },
+  { id: "gulai-kikil", name: "Gulai Kikil", price: 23000, img: "https://loremflickr.com/400/300/gulaikikil,beefcurry" },
+  { id: "ayam-rendang", name: "Ayam Rendang", price: 27000, img: "https://loremflickr.com/400/300/chickenrendang,indonesianfood" },
+  { id: "sayur-sayuran", name: "Sayur-Sayuran", price: 14000, img: "https://loremflickr.com/400/300/vegetables,sayur,indonesianfood" },
+];
+
+const WHATSAPP_NUMBER = "6281234567890"; // ganti dengan nomor WA pemilik
+
+/* ============ STATE (localStorage) ============ */
+const STORAGE_USER = "sr_user";
+const STORAGE_CART = "sr_cart";
+
+function getUser() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_USER)); } catch { return null; }
+}
+function setUser(user) { localStorage.setItem(STORAGE_USER, JSON.stringify(user)); }
+function clearUser() { localStorage.removeItem(STORAGE_USER); }
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_CART)) || {}; } catch { return {}; }
+}
+function setCart(cart) { localStorage.setItem(STORAGE_CART, JSON.stringify(cart)); }
+
+/* ============ NAVIGATION ============ */
+const pages = ["home", "menu", "about", "login", "signup", "pesanan"];
+
+function showPage(pageId) {
+  if (pageId === "pesanan" && !getUser()) {
+    pageId = "login";
+  }
+  if ((pageId === "login" || pageId === "signup") && getUser()) {
+    pageId = "pesanan";
+  }
+  pages.forEach(p => {
+    const el = document.getElementById(`page-${p}`);
+    if (el) el.style.display = (p === pageId) ? "" : "none";
+  });
+  document.querySelectorAll(".nav-link").forEach(link => {
+    link.classList.toggle("active", link.dataset.page === pageId);
+  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  closeMobileNav();
+}
+
+document.addEventListener("click", (e) => {
+  const target = e.target.closest("[data-page]");
+  if (target) {
+    e.preventDefault();
+    showPage(target.dataset.page);
+  }
+});
+
+function closeMobileNav() {
+  document.getElementById("navLinks").classList.remove("open");
+}
+
+document.getElementById("hamburger").addEventListener("click", () => {
+  document.getElementById("navLinks").classList.toggle("open");
+});
+
+/* ============ AUTH UI ============ */
+function refreshAuthUI() {
+  const user = getUser();
+  const navAuth = document.getElementById("navAuth");
+  const navUser = document.getElementById("navUser");
+  const navPesanan = document.getElementById("navPesanan");
+
+  if (user) {
+    navAuth.style.display = "none";
+    navUser.style.display = "flex";
+    navPesanan.style.display = "flex";
+    document.getElementById("userNameLabel").textContent = user.name.split(" ")[0];
+  } else {
+    navAuth.style.display = "flex";
+    navUser.style.display = "none";
+    navPesanan.style.display = "none";
+  }
+  updateOrderBadge();
+}
+
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  clearUser();
+  refreshAuthUI();
+  showPage("home");
+  showToast("Anda telah keluar.");
+});
+
+document.getElementById("loginForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("loginName").value.trim();
+  const phone = document.getElementById("loginPhone").value.trim();
+  if (!name || !phone) return;
+  setUser({ name, phone, address: "" });
+  refreshAuthUI();
+  showToast(`Selamat datang, ${name}!`);
+  showPage("menu");
+  e.target.reset();
+});
+
+document.getElementById("signupForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("signupName").value.trim();
+  const phone = document.getElementById("signupPhone").value.trim();
+  const address = document.getElementById("signupAddress").value.trim();
+  if (!name || !phone) return;
+  setUser({ name, phone, address });
+  refreshAuthUI();
+  showToast(`Akun berhasil dibuat. Selamat datang, ${name}!`);
+  showPage("menu");
+  e.target.reset();
+});
+
+/* ============ MENU RENDER ============ */
+function renderMenu() {
+  const grid = document.getElementById("menuGrid");
+  grid.innerHTML = MENU_ITEMS.map(item => `
+    <div class="menu-card">
+      <div class="menu-card-image">
+        <img src="${item.img}" alt="${item.name}" loading="lazy">
+      </div>
+      <div class="menu-card-body">
+        <div>
+          <p class="menu-card-name">${item.name}</p>
+          <p class="menu-card-price">Rp ${item.price.toLocaleString("id-ID")}</p>
+        </div>
+        <button class="order-btn" data-id="${item.id}" aria-label="Pesan ${item.name}">+</button>
+      </div>
+    </div>
+  `).join("");
+
+  grid.querySelectorAll(".order-btn").forEach(btn => {
+    btn.addEventListener("click", () => handleOrderClick(btn.dataset.id, btn));
+  });
+}
+
+function handleOrderClick(itemId, btnEl) {
+  const user = getUser();
+  if (!user) {
+    showToast("Silakan login terlebih dahulu untuk memesan.");
+    showPage("login");
+    return;
+  }
+  const cart = getCart();
+  cart[itemId] = (cart[itemId] || 0) + 1;
+  setCart(cart);
+  updateOrderBadge();
+
+  if (btnEl) {
+    btnEl.classList.add("added");
+    btnEl.textContent = "✓";
+    setTimeout(() => { btnEl.classList.remove("added"); btnEl.textContent = "+"; }, 700);
+  }
+  const item = MENU_ITEMS.find(i => i.id === itemId);
+  showToast(`${item.name} ditambahkan ke Pesanan Saya.`);
+}
+
+/* ============ ORDER BADGE ============ */
+function updateOrderBadge() {
+  const cart = getCart();
+  const total = Object.values(cart).reduce((a, b) => a + b, 0);
+  document.getElementById("orderBadge").textContent = total;
+}
+
+/* ============ PESANAN SAYA RENDER ============ */
+function renderOrders() {
+  const cart = getCart();
+  const list = document.getElementById("orderList");
+  const entries = Object.entries(cart).filter(([, qty]) => qty > 0);
+
+  if (entries.length === 0) {
+    list.innerHTML = `<p class="empty-state">Belum ada pesanan. Yuk pilih menu favorit Anda.</p>`;
+    document.getElementById("orderWhatsappBtn").disabled = true;
+    return;
+  }
+
+  document.getElementById("orderWhatsappBtn").disabled = false;
+
+  let totalPrice = 0;
+  list.innerHTML = entries.map(([id, qty]) => {
+    const item = MENU_ITEMS.find(i => i.id === id);
+    if (!item) return "";
+    totalPrice += item.price * qty;
+    return `
+      <div class="order-item" data-id="${id}">
+        <img src="${item.img}" alt="${item.name}">
+        <div class="order-item-info">
+          <h4>${item.name}</h4>
+          <span>Rp ${item.price.toLocaleString("id-ID")}</span>
+        </div>
+        <div class="qty-control">
+          <button class="qty-minus" data-id="${id}" aria-label="Kurangi">−</button>
+          <span>${qty}</span>
+          <button class="qty-plus" data-id="${id}" aria-label="Tambah">+</button>
+        </div>
+        <button class="remove-btn" data-id="${id}">Hapus</button>
+      </div>
+    `;
+  }).join("") + `<div class="order-summary-line"><span>Total</span><span>Rp ${totalPrice.toLocaleString("id-ID")}</span></div>`;
+
+  list.querySelectorAll(".qty-plus").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, 1)));
+  list.querySelectorAll(".qty-minus").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, -1)));
+  list.querySelectorAll(".remove-btn").forEach(b => b.addEventListener("click", () => removeItem(b.dataset.id)));
+}
+
+function changeQty(id, delta) {
+  const cart = getCart();
+  cart[id] = (cart[id] || 0) + delta;
+  if (cart[id] <= 0) delete cart[id];
+  setCart(cart);
+  updateOrderBadge();
+  renderOrders();
+}
+
+function removeItem(id) {
+  const cart = getCart();
+  delete cart[id];
+  setCart(cart);
+  updateOrderBadge();
+  renderOrders();
+}
+
+/* ============ WHATSAPP ORDER ============ */
+document.getElementById("orderWhatsappBtn").addEventListener("click", () => {
+  const cart = getCart();
+  const entries = Object.entries(cart).filter(([, qty]) => qty > 0);
+  if (entries.length === 0) return;
+
+  const address = document.getElementById("deliveryAddress").value.trim();
+  const phone = document.getElementById("deliveryPhone").value.trim();
+  const time = document.getElementById("deliveryTime").value.trim();
+
+  const itemLines = entries.map(([id, qty]) => {
+    const item = MENU_ITEMS.find(i => i.id === id);
+    return `- ${item.name} x${qty}`;
+  }).join("\n");
+
+  const message =
+`Assalamu'alaikum, saya ingin pesan makanan sebagai berikut :
+${itemLines}
+
+Alamat Pengiriman : ${address || "-"}
+Nomor HP/WA yang bisa di hubungi : ${phone || "-"}
+Waktu Pengantaran : ${time || "-"}`;
+
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+});
+
+/* ============ TOAST ============ */
+let toastTimer;
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+/* ============ INIT ============ */
+function init() {
+  renderMenu();
+  refreshAuthUI();
+  showPage("home");
+
+  // re-render pesanan whenever that page becomes visible
+  document.querySelectorAll("[data-page='pesanan']").forEach(el => {
+    el.addEventListener("click", renderOrders);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", init);
