@@ -88,13 +88,13 @@ function setCart(cart) {
 }
 
 /* ============ NAVIGATION ============ */
-const pages = ["home", "login", "signup", "pesanan"];
+const pages = ["home", "login", "pesanan"];
 
 function showPage(pageId, clickedEl) {
   if (pageId === "pesanan" && !getUser()) {
     pageId = "login";
   }
-  if ((pageId === "login" || pageId === "signup") && getUser()) {
+  if (pageId === "login" && getUser()) {
     pageId = "pesanan";
   }
   pages.forEach((p) => {
@@ -172,20 +172,11 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
   setUser({ name, phone, address: "" });
   refreshAuthUI();
   showToast(`Selamat datang, ${name}!`);
-  showPage("menu");
-  e.target.reset();
-});
-
-document.getElementById("signupForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const name = document.getElementById("signupName").value.trim();
-  const phone = document.getElementById("signupPhone").value.trim();
-  const address = document.getElementById("signupAddress").value.trim();
-  if (!name || !phone) return;
-  setUser({ name, phone, address });
-  refreshAuthUI();
-  showToast(`Akun berhasil dibuat. Selamat datang, ${name}!`);
-  showPage("menu");
+  showPage("home", document.querySelector('.nav-link[data-scroll="menu"]'));
+  setTimeout(() => {
+    const el = document.getElementById("menu");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 50);
   e.target.reset();
 });
 

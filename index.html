@@ -10,7 +10,7 @@
     <header class="navbar">
       <div class="brand">
         <span class="brand-mark"
-          ><img src="./img/sepiring-rindu-logo.jpeg" alt="Sepiring Rindu Logo"
+          ><img src="/img/sepiring-rindu-logo.jpeg" alt="Sepiring Rindu Logo"
         /></span>
         <div class="brand-text">
           <span class="brand-name">Sepiring Rindu</span>
@@ -39,8 +39,7 @@
       </nav>
 
       <div class="nav-auth" id="navAuth">
-        <a href="#" class="btn-text" data-page="login">Login</a>
-        <a href="#" class="btn-outline" data-page="signup">Sign Up</a>
+        <a href="#" class="btn-primary" data-page="login">Pesan Sekarang</a>
       </div>
 
       <div class="nav-auth" id="navUser" style="display: none">
@@ -123,7 +122,7 @@
             </svg>
             <div class="halal-badge-text">
               <strong>Bersertifikat Halal</strong>
-              <span>InsyaAllah terbuat dari bahan-bahan yang Halal</span>
+              <span>Terdaftar di BPJPH Kementerian Agama RI</span>
             </div>
           </div>
         </div>
@@ -165,8 +164,10 @@
       <!-- LOGIN -->
       <section class="page" id="page-login" style="display: none">
         <div class="auth-card">
-          <p class="eyebrow">Selamat Datang Kembali</p>
-          <h2>Masuk ke Akun Anda</h2>
+          <p class="eyebrow">
+            Selamat Datang di Sepiring Rindu - Masakan Rumah
+          </p>
+          <h2>Isi Nama dan Nomor HP untuk Memesan</h2>
           <form id="loginForm">
             <label
               >Nama
@@ -188,49 +189,6 @@
             </label>
             <button type="submit" class="btn-primary full">Masuk</button>
           </form>
-          <p class="auth-switch">
-            Belum punya akun? <a href="#" data-page="signup">Daftar di sini</a>
-          </p>
-        </div>
-      </section>
-
-      <!-- SIGNUP -->
-      <section class="page" id="page-signup" style="display: none">
-        <div class="auth-card">
-          <p class="eyebrow">Bergabung Bersama Kami</p>
-          <h2>Buat Akun Baru</h2>
-          <form id="signupForm">
-            <label
-              >Nama Lengkap
-              <input
-                type="text"
-                id="signupName"
-                placeholder="Nama lengkap Anda"
-                required
-              />
-            </label>
-            <label
-              >Nomor HP / WA
-              <input
-                type="tel"
-                id="signupPhone"
-                placeholder="08xxxxxxxxxx"
-                required
-              />
-            </label>
-            <label
-              >Alamat
-              <input
-                type="text"
-                id="signupAddress"
-                placeholder="Alamat pengiriman"
-              />
-            </label>
-            <button type="submit" class="btn-primary full">Daftar</button>
-          </form>
-          <p class="auth-switch">
-            Sudah punya akun? <a href="#" data-page="login">Masuk di sini</a>
-          </p>
         </div>
       </section>
 
