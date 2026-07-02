@@ -4,55 +4,55 @@ const MENU_ITEMS = [
     id: "dendeng-balado",
     name: "Dendeng Balado",
     price: 28000,
-    img: "https://loremflickr.com/400/300/dendengbalado,indonesianfood",
+    img: "./img/dendeng.jpg",
   },
   {
     id: "ayam-pop",
     name: "Ayam Pop",
     price: 25000,
-    img: "https://loremflickr.com/400/300/ayampop,friedchicken,indonesianfood",
+    img: "./img/ayampop.jpg",
   },
   {
     id: "tumis-kangkung",
     name: "Tumis Kangkung",
     price: 15000,
-    img: "https://loremflickr.com/400/300/kangkung,stirfry,vegetable",
+    img: "./img/tumiskangkung.jpg",
   },
   {
     id: "rendang",
     name: "Rendang",
     price: 32000,
-    img: "https://loremflickr.com/400/300/rendang,beef,indonesianfood",
+    img: "./img/rendang.jpg",
   },
   {
     id: "ayam-gulai",
     name: "Ayam Gulai",
     price: 26000,
-    img: "https://loremflickr.com/400/300/ayamgulai,curry,chicken",
+    img: "./img/ayamgulai.jpg",
   },
   {
     id: "gulai-tambusu",
     name: "Gulai Tambusu",
     price: 24000,
-    img: "https://loremflickr.com/400/300/gulai,curry,indonesianfood",
+    img: "./img/gulaitambusu.jpg",
   },
   {
     id: "gulai-kikil",
     name: "Gulai Kikil",
     price: 23000,
-    img: "https://loremflickr.com/400/300/gulaikikil,beefcurry",
+    img: "./img/gulaikikil.jpg",
   },
   {
     id: "ayam-rendang",
     name: "Ayam Rendang",
     price: 27000,
-    img: "https://loremflickr.com/400/300/chickenrendang,indonesianfood",
+    img: "./img/ayamrendang.jpg",
   },
   {
     id: "sayur-sayuran",
     name: "Sayur-Sayuran",
     price: 14000,
-    img: "https://loremflickr.com/400/300/vegetables,sayur,indonesianfood",
+    img: "./img/sayuran.jpg",
   },
 ];
 
@@ -138,20 +138,25 @@ document.getElementById("hamburger").addEventListener("click", () => {
 /* ============ AUTH UI ============ */
 function refreshAuthUI() {
   const user = getUser();
-  const navAuth = document.getElementById("navAuth");
   const navUser = document.getElementById("navUser");
   const navPesanan = document.getElementById("navPesanan");
+  const heroPesanBtn = document.querySelector(".btn-outline-gold"); // cari by class saja, bukan by data-page
 
   if (user) {
-    navAuth.style.display = "none";
     navUser.style.display = "flex";
     navPesanan.style.display = "flex";
     document.getElementById("userNameLabel").textContent =
       user.name.split(" ")[0];
+    if (heroPesanBtn) {
+      heroPesanBtn.setAttribute("data-page", "pesanan");
+      heroPesanBtn.removeAttribute("data-scroll");
+    }
   } else {
-    navAuth.style.display = "flex";
     navUser.style.display = "none";
     navPesanan.style.display = "none";
+    if (heroPesanBtn) {
+      heroPesanBtn.setAttribute("data-page", "login"); // sekarang selalu ditemukan
+    }
   }
   updateOrderBadge();
 }

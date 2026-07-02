@@ -67,15 +67,10 @@ img {
   width: 42px;
   height: 42px;
   border-radius: 10px;
-  background: var(--deep);
-  color: var(--gold-light);
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.5px;
 }
 
 .brand-text {
@@ -91,7 +86,7 @@ img {
 }
 .brand-tagline {
   font-size: 11px;
-  color: var(--gold);
+  color: var(--deep);
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
@@ -99,38 +94,65 @@ img {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 6px;
   flex: 1;
   justify-content: center;
 }
 
 .nav-link {
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-soft);
   position: relative;
-  padding: 6px 2px;
+  padding: 8px 16px;
+  border-radius: 999px;
   display: flex;
   align-items: center;
   gap: 6px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+  border: 1.5px solid transparent;
 }
 
 .nav-link:hover {
-  color: var(--deep);
+  background: var(--deep);
+  color: var(--white);
 }
 
 .nav-link.active {
-  color: var(--deep);
+  background: var(--deep);
+  color: var(--white);
 }
 .nav-link.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -4px;
-  height: 2px;
+  display: none;
+}
+
+.btn-hubungi {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--deep);
+  color: var(--white);
+  border: none;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+  flex-shrink: 0;
+}
+.btn-hubungi svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.btn-hubungi:hover {
   background: var(--gold);
-  border-radius: 2px;
+  transform: translateY(-1px);
 }
 
 .badge {
@@ -148,12 +170,6 @@ img {
   display: flex;
   align-items: center;
   gap: 14px;
-}
-
-.btn-text {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--deep);
 }
 
 .btn-outline {
@@ -232,11 +248,22 @@ img {
   margin: 0;
 }
 
+.badges-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 22px;
+  width: max-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .halal-badge {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin-top: 22px;
   padding: 10px 18px 10px 10px;
   background: var(--cream);
   border: 1px solid var(--border);
@@ -337,6 +364,33 @@ img {
 .btn-primary.full {
   width: 100%;
   text-align: center;
+}
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-outline-gold {
+  display: inline-block;
+  background: transparent;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  padding: 11px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14.5px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+.btn-outline-gold:hover {
+  background: var(--gold);
+  color: var(--white);
+  transform: translateY(-1px);
 }
 
 /* ===== MENU GRID ===== */
@@ -501,16 +555,6 @@ img {
 .auth-card button {
   margin-top: 6px;
 }
-.auth-switch {
-  margin-top: 22px;
-  font-size: 13.5px;
-  color: var(--text-soft);
-}
-.auth-switch a {
-  color: var(--gold);
-  font-weight: 700;
-}
-
 /* ===== PESANAN SAYA ===== */
 .order-wrap {
   display: flex;
@@ -724,11 +768,24 @@ img {
   .hero-image {
     width: 100%;
   }
+  .hero-image img {
+    height: 300px;
+  }
+  .hero-text h1 {
+    font-size: 36px;
+  }
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .order-form-card {
     position: static;
+    width: 100%;
+  }
+  .btn-hubungi span {
+    display: none;
+  }
+  .btn-hubungi {
+    padding: 9px 12px;
   }
 }
 
@@ -736,38 +793,86 @@ img {
   .navbar {
     padding: 12px 18px;
     flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0;
   }
-  .nav-links {
+  /* Baris 1: Brand kiri, Hubungi Kami + Hamburger kanan */
+  .brand {
+    order: 1;
+    margin-right: auto;
+  }
+  .btn-hubungi {
+    order: 2;
+    padding: 8px 10px;
+  }
+  .btn-hubungi span {
+    display: none;
+  }
+  .hamburger {
     order: 3;
+    display: flex;
+    margin-left: 6px;
+  }
+  /* Baris 2: Halo + Keluar (saat sudah login) */
+  #navUser {
+    order: 4;
     width: 100%;
+    padding: 10px 4px 0;
+    gap: 8px;
+  }
+  /* Baris 3: Nav links (muncul saat hamburger diklik) */
+  .nav-links {
+    order: 5;
+    width: 100%;
+    flex: none;
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.25s ease;
+    transition: max-height 0.3s ease;
   }
   .nav-links.open {
-    max-height: 300px;
-    padding: 14px 0;
+    max-height: 360px;
+    padding: 10px 0 14px;
   }
   .nav-link {
     width: 100%;
-    padding: 10px 4px;
-  }
-  .hamburger {
-    display: flex;
+    padding: 10px 16px;
+    border-radius: 10px;
   }
   #app {
     padding: 0 18px;
   }
+  .hero {
+    padding: 40px 0 56px;
+    gap: 32px;
+  }
   .hero-text h1 {
-    font-size: 32px;
+    font-size: 28px;
+  }
+  .hero-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .btn-outline-gold {
+    width: 100%;
+    text-align: center;
+  }
+  .btn-primary:not(.full) {
+    width: 100%;
+    text-align: center;
   }
   .menu-grid {
     grid-template-columns: 1fr;
   }
-  .nav-auth {
-    gap: 8px;
+  .badges-row {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .halal-badge {
+    flex: 1;
+    min-width: 200px;
   }
 }
